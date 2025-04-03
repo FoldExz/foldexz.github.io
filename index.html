@@ -1,57 +1,241 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Portofolio</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            text-align: center;
-            background-color: #f4f4f4;
-        }
-        header {
-            background: #333;
-            color: white;
-            padding: 20px;
-            font-size: 24px;
-        }
-        .container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-            background: white;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        img {
-            width: 150px;
-            border-radius: 50%;
-        }
-        .social-links a {
-            margin: 10px;
-            text-decoration: none;
-            color: #333;
-        }
-    </style>
+    <title>Ihsanta Zaki - Network Engineer & Security Enthusiast</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=General+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
 </head>
 <body>
-    <header>
-        Portofolio Saya
-    </header>
-    <div class="container">
-        <img src="https://via.placeholder.com/150" alt="Foto Profil">
-        <h1>Nama Kamu</h1>
-        <p>Deskripsi singkat tentang dirimu dan apa yang kamu lakukan.</p>
-        <h2>Proyek</h2>
-        <p>Tambahkan daftar proyek atau pengalaman kerjamu di sini.</p>
-        <h2>Kontak</h2>
-        <div class="social-links">
-            <a href="#">LinkedIn</a> |
-            <a href="#">GitHub</a> |
-            <a href="#">Twitter</a>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <img src="images/logo-foldexz.png" alt="Logo">
+            </div>
+            <nav class="navbar">
+                <ul>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#blog">Blog</a></li>
+                    <li><a href="#books">Books</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
         </div>
-    </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Hi, I am Ihsanta <span class="wave">👋</span></h1>
+                <h2>Network Engineer & Security Enthusiast</h2>
+                <div class="certification">
+                    <img src="images/cisco-certification.png" alt="Cisco Certification" class="cert-image">
+                    <p class="cert-number">CCNA #14065549</p>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="images/profile.png" alt="Ihsanta Zaki" class="profile-image">
+            </div>
+        </div>
+    </section>
+
+    <!-- Cards Section -->
+    <section class="cards-section" id="about">
+        <div class="container">
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-image">
+                        <img src="images/avatar.png" alt="Ihsanta Zaki">
+                    </div>
+                    <div class="card-content">
+                        <h3>Hi, I'm Ihsanta Zaki</h3>
+                        <p>With 3+ years in network engineering, I combine CCNA certification with hands-on experience to design and implement secure networking solutions that drive business efficiency.</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-image">
+                        <div class="vendor-logos">
+                            <img src="images/gambar-vendor.png" alt="Cisco" class="vendor-logo">
+                     
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h3>My Skills</h3>
+                        <p>Network engineering (Cisco, Fortinet, AWS, MikroTik), cybersecurity implementation, and cloud infrastructure. Currently expanding knowledge in quantum tech and cloud computing.</p>
+                    </div>
+                </div>
+                
+                <div class="card card-large">
+                    <div class="card-image">
+                        <img src="images/globe.png" alt="Network Globe">
+                    </div>
+                    <div class="card-content">
+                        <h3>Professional Journey</h3>
+                        <p>From Network Engineer at PT. Mastersystem Infotama to pursuing Computer Engineering at PENS, my journey focuses on developing innovative networking solutions and security systems.</p>
+                    </div>
+                </div>
+                
+                <div class="card card-wide">
+                    <div class="card-image">
+                        <img src="images/network-diagram.png" alt="Network Diagram">
+                    </div>
+                    <div class="card-content">
+                        <h3>What Drives Me</h3>
+                        <p>Building secure, resilient network infrastructures that enable business innovation while protecting against evolving cyber threats.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog Section -->
+    <section class="blog-section" id="blog">
+        <div class="container">
+            <h2 class="section-title">Want to learn together?</h2>
+            <p class="section-description">Join me as I explore the world of networking, security, and technology. Check out my latest blog posts:</p>
+            
+            <div class="blog-posts">
+                <div class="blog-post">
+                    <div class="blog-content">
+                        <span class="blog-date">Mar 13</span>
+                        <h3 class="blog-title">Unveiling Cisco | EIGRP</h3>
+                        <p class="blog-excerpt">In EIGRP configuration, there are scenarios where we need to filter routing updates to control which routes are accepted or...</p>
+                    </div>
+                    <div class="blog-image">
+                        <img src="images/blog1.webp" alt="Cisco EIGRP">
+                    </div>
+                </div>
+                
+                <div class="blog-post">
+                    <div class="blog-content">
+                        <span class="blog-date">Mar 14</span>
+                        <h3 class="blog-title">Unveiling Cisco | OSPF</h3>
+                        <p class="blog-excerpt">In OSPF configuration, there are scenarios where we need to filter routing updates to control which routes are accepted or...</p>
+                    </div>
+                    <div class="blog-image">
+                        <img src="images/blog2.webp" alt="Cisco OSPF">
+                    </div>
+                </div>
+                
+                <div class="blog-post">
+                    <div class="blog-content">
+                        <span class="blog-date">Mar 15</span>
+                        <h3 class="blog-title">Unveiling Cisco | BGP</h3>
+                        <p class="blog-excerpt">In BGP configuration, there are scenarios where we need to filter routing updates to control which routes are accepted or...</p>
+                    </div>
+                    <div class="blog-image">
+                        <img src="images/blog3.webp" alt="Cisco BGP">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Books Section -->
+    <section class="books-section" id="books">
+        <div class="container">
+            <h2 class="section-title">Unveil Deeper Series</h2>
+            <p class="section-description">A book series I created, covering advanced networking topics.</p>
+            
+            <div class="book-slider">
+                <div class="book-slide active">
+                    <div class="book-info">
+                        <div class="vendor-logo">
+                            <img src="images/mikrotik-logo.png" alt="MikroTik Logo">
+                        </div>
+                        <h3 class="book-title">Unveil Deeper | Mikrotik - MTCNA</h3>
+                        <div class="book-description">
+                            <p>This comprehensive guide covers all essential aspects of Mikrotik Router OS with a focus on network administrator certification topics. The book takes readers from basic operations like accessing and configuring Mikrotik devices to advanced features including wireless setup, firewall implementation, QoS management, and network management tools. Clear step-by-step instructions make complex networking concepts accessible to beginners.</p>
+                            <p>The book excels in its practical approach, with extensive coverage of real-world applications like creating wireless bridges, setting up repeaters, implementing content filtering, and configuring hotspots. It provides the perfect preparation for the Mikrotik Certified Network Associate (MTCNA) exam while delivering immediate value for network administrators looking to implement Mikrotik solutions in production environments.</p>
+                        </div>
+                        <div class="book-navigation">
+                            <button class="nav-btn prev-btn" onclick="prevBook()">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 35 35" fill="none">
+                                    <path d="M17.5 1.09375C8.43937 1.09375 1.09375 8.43937 1.09375 17.5C1.09375 26.5606 8.43937 33.9062 17.5 33.9062C26.5606 33.9062 33.9062 26.5606 33.9062 17.5C33.9062 8.43937 26.5606 1.09375 17.5 1.09375ZM26.7969 20.4684H16.5741V26.25L8.20312 17.5L16.5741 8.75V14.8438H26.7969V20.4684Z" fill="white"/>
+                                </svg>
+                            </button>
+                            <button class="nav-btn next-btn" onclick="nextBook()">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 35 35" fill="none">
+                                    <path d="M17.5 33.9062C26.5606 33.9062 33.9063 26.5606 33.9063 17.5C33.9063 8.43937 26.5606 1.09375 17.5 1.09375C8.43938 1.09375 1.09375 8.43937 1.09375 17.5C1.09375 26.5606 8.43937 33.9062 17.5 33.9062ZM8.20313 14.5316L18.4259 14.5316L18.4259 8.75L26.7969 17.5L18.4259 26.25L18.4259 20.1562L8.20313 20.1562L8.20313 14.5316Z" fill="white"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="book-cover">
+                        <img src="images/book-mtcna.png" alt="Unveil Deeper | Mikrotik - MTCNA">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact-section" id="contact">
+        <div class="container">
+            <div class="contact-form-container">
+                <div class="form-header">
+                    <div class="window-controls">
+                        <span class="control red"></span>
+                        <span class="control yellow"></span>
+                        <span class="control green"></span>
+                    </div>
+                </div>
+                <div class="form-content">
+                    <h2 class="form-title">Let's talk</h2>
+                    <p class="form-description">Whether you're looking to collaborate, have questions, or just want to say hello!</p>
+                    
+                    <form id="contactForm" onsubmit="submitForm(event)">
+                        <div class="form-group">
+                            <label for="fullName">Full Name</label>
+                            <input type="text" id="fullName" name="fullName" placeholder="ex., John Doe" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Email address</label>
+                            <input type="email" id="email" name="email" placeholder="your@email.com" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message">Your message</label>
+                            <textarea id="message" name="message" placeholder="Type your message here..." required></textarea>
+                        </div>
+                        
+                        <button type="submit" class="submit-btn">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-divider"></div>
+            <div class="footer-content">
+                <p class="footer-links">Terms & Conditions | Privacy Policy</p>
+                <div class="social-icons">
+                    <a href="#" class="social-icon" aria-label="Fastwork">
+                        <img src="images/icon-fastwork.png" alt="Fastwork">
+                    </a>
+                    <a href="#" class="social-icon" aria-label="LinkedIn">
+                        <img src="images/icon-linkedin.png" alt="LinkedIn">
+                    </a>
+                    <a href="#" class="social-icon" aria-label="WhatsApp">
+                        <img src="images/icon-whatsapp.png" alt="WhatsApp">
+                    </a>
+                </div>
+                <p class="copyright">© 2025 Ihsanta Zaki. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
 </body>
 </html>
