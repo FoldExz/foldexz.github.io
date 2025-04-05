@@ -164,13 +164,14 @@ if (!mobileMenuBtn) {
     document.querySelector('.header .container').appendChild(btn);
 }
 
-// Setup event listeners for mobile menu
+// Mobile menu functionality
 document.addEventListener('DOMContentLoaded', function() {
     const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
     const mobileMenu = document.querySelector('.mobile-menu');
     const overlay = document.querySelector('.overlay');
     const menuClose = document.querySelector('.menu-close');
     
+    // Toggle menu open
     if (mobileMenuBtn) {
         mobileMenuBtn.addEventListener('click', function() {
             mobileMenu.classList.add('active');
@@ -179,18 +180,21 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    if (menuClose) {
-        menuClose.addEventListener('click', closeMenu);
-    }
-    
-    if (overlay) {
-        overlay.addEventListener('click', closeMenu);
-    }
-    
+    // Function to close menu
     function closeMenu() {
         mobileMenu.classList.remove('active');
         overlay.classList.remove('active');
         document.body.style.overflow = '';
+    }
+    
+    // Close button functionality
+    if (menuClose) {
+        menuClose.addEventListener('click', closeMenu);
+    }
+    
+    // Close when clicking overlay
+    if (overlay) {
+        overlay.addEventListener('click', closeMenu);
     }
     
     // Close menu when clicking menu items
