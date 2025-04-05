@@ -55,21 +55,6 @@ function prevBook() {
   updateBookSlide();
 }
 
-// Form submission
-function submitForm(event) {
-  event.preventDefault();
-  
-  const fullName = document.getElementById('fullName').value;
-  const email = document.getElementById('email').value;
-  const message = document.getElementById('message').value;
-  
-  // Here you would typically send the form data to a server
-  // For now, we'll just log it and show a success message
-  console.log('Form submitted:', { fullName, email, message });
-  
-  alert('Thank you for your message! I will get back to you soon.');
-  document.getElementById('contactForm').reset();
-}
 
 // Add smooth scrolling for anchor links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -143,4 +128,74 @@ document.addEventListener("DOMContentLoaded", function() {
           event.preventDefault();
       };
   });
+});
+
+// Mobile menu functionality
+const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+const mobileMenu = document.querySelector('.mobile-menu');
+const overlay = document.querySelector('.overlay');
+const menuClose = document.querySelector('.menu-close');
+
+// Make sure these elements exist in your HTML
+if (!mobileMenu) {
+    const menuDiv = document.createElement('div');
+    menuDiv.className = 'mobile-menu';
+    
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'menu-close';
+    closeBtn.innerHTML = '✕';
+    menuDiv.appendChild(closeBtn);
+    
+    const menuLinks = document.querySelector('.navbar ul').cloneNode(true);
+    menuDiv.appendChild(menuLinks);
+    
+    document.body.appendChild(menuDiv);
+    
+    const overlayDiv = document.createElement('div');
+    overlayDiv.className = 'overlay';
+    document.body.appendChild(overlayDiv);
+}
+
+// Add button if not exists
+if (!mobileMenuBtn) {
+    const btn = document.createElement('button');
+    btn.className = 'mobile-menu-btn';
+    btn.innerHTML = '☰';
+    document.querySelector('.header .container').appendChild(btn);
+}
+
+// Setup event listeners for mobile menu
+document.addEventListener('DOMContentLoaded', function() {
+    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+    const mobileMenu = document.querySelector('.mobile-menu');
+    const overlay = document.querySelector('.overlay');
+    const menuClose = document.querySelector('.menu-close');
+    
+    if (mobileMenuBtn) {
+        mobileMenuBtn.addEventListener('click', function() {
+            mobileMenu.classList.add('active');
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+    }
+    
+    if (menuClose) {
+        menuClose.addEventListener('click', closeMenu);
+    }
+    
+    if (overlay) {
+        overlay.addEventListener('click', closeMenu);
+    }
+    
+    function closeMenu() {
+        mobileMenu.classList.remove('active');
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+    
+    // Close menu when clicking menu items
+    const mobileMenuLinks = document.querySelectorAll('.mobile-menu a');
+    mobileMenuLinks.forEach(link => {
+        link.addEventListener('click', closeMenu);
+    });
 });
