@@ -203,104 +203,45 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// EmailJS Integration
-document.addEventListener('DOMContentLoaded', function() {
-    // Load EmailJS SDK
-    const script = document.createElement('script');
-    script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
-    script.async = true;
-    document.head.appendChild(script);
-    
-    script.onload = function() {
-        // Initialize EmailJS with your public key
-        emailjs.init(process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY);
+document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("contactForm");
+    const successMessage = document.querySelector(".success-message");
+    const errorMessage = document.querySelector(".error-message");
+  
+    // Init EmailJS
+    emailjs.init(window.env.EMAILJS_PUBLIC_KEY);
+  
+    window.submitForm = function (event) {
+      event.preventDefault();
+  
+      successMessage.style.display = "none";
+      errorMessage.style.display = "none";
+  
+      const fullName = document.getElementById("fullName").value;
+      const email = document.getElementById("email").value;
+      const message = document.getElementById("message").value;
+  
+      const templateParams = {
+        from_name: fullName,
+        from_email: email,
+        message: message,
+        to_email: window.env.EMAILJS_RECEIVER,
+      };
+  
+      emailjs
+        .send(
+          window.env.EMAILJS_SERVICE_ID,
+          window.env.EMAILJS_TEMPLATE_ID,
+          templateParams
+        )
+        .then(() => {
+          form.reset();
+          successMessage.style.display = "block";
+        })
+        .catch((error) => {
+          console.error("EmailJS error:", error);
+          errorMessage.style.display = "block";
+        });
     };
-    
-    // Create success and error message elements if they don't exist
-    if (!document.querySelector('.success-message')) {
-        const successMsg = document.createElement('div');
-        successMsg.className = 'success-message';
-        successMsg.textContent = 'Your message has been sent successfully! I will get back to you soon.';
-        
-        const contactForm = document.getElementById('contactForm');
-        contactForm.parentNode.insertBefore(successMsg, contactForm.nextSibling);
-    }
-    
-    if (!document.querySelector('.error-message')) {
-        const errorMsg = document.createElement('div');
-        errorMsg.className = 'error-message';
-        errorMsg.textContent = 'Oops! Something went wrong. Please try again later.';
-        
-        const contactForm = document.getElementById('contactForm');
-        contactForm.parentNode.insertBefore(errorMsg, contactForm.nextSibling);
-    }
-});
-
-// Contact form submission handler
-function submitForm(event) {
-    event.preventDefault();
-    
-    const contactForm = document.getElementById('contactForm');
-    const submitBtn = contactForm.querySelector('.submit-btn');
-    const successMessage = document.querySelector('.success-message');
-    const errorMessage = document.querySelector('.error-message');
-    
-    // Hide any existing messages
-    successMessage.style.display = 'none';
-    errorMessage.style.display = 'none';
-    
-    // Add loading state to button
-    submitBtn.disabled = true;
-    submitBtn.classList.add('loading');
-    submitBtn.textContent = '';
-    
-    // Get form data
-    const formData = {
-        from_name: document.getElementById('fullName').value,
-        from_email: document.getElementById('email').value,
-        message: document.getElementById('message').value,
-        to_email: process.env.NEXT_PUBLIC_EMAILJS_RECEIVER || 'ihsantazaki@gmail.com'
-    };
-    
-    // Send the email
-    emailjs.send(
-        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID,
-        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID,
-        formData
-    )
-    .then(function(response) {
-        console.log('Email sent successfully!', response.status, response.text);
-        
-        // Show success message
-        successMessage.style.display = 'block';
-        
-        // Reset form
-        contactForm.reset();
-        
-        // Reset button state
-        submitBtn.disabled = false;
-        submitBtn.classList.remove('loading');
-        submitBtn.textContent = 'Send Message';
-        
-        // Hide success message after 5 seconds
-        setTimeout(function() {
-            successMessage.style.display = 'none';
-        }, 5000);
-    })
-    .catch(function(error) {
-        console.error('Failed to send email:', error);
-        
-        // Show error message
-        errorMessage.style.display = 'block';
-        
-        // Reset button state
-        submitBtn.disabled = false;
-        submitBtn.classList.remove('loading');
-        submitBtn.textContent = 'Send Message';
-        
-        // Hide error message after 5 seconds
-        setTimeout(function() {
-            errorMessage.style.display = 'none';
-        }, 5000);
-    });
-}
+  });
+  
