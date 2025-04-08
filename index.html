@@ -9,7 +9,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=General+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
     <link rel="icon" href="images/logo-foldexz.png" type="image/png">
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 </head>
 <body>
     <!-- Header -->
@@ -250,7 +249,15 @@
             </div>
         </div>
     </footer>
-
-    <script src="script.js"></script>
+    <script>
+        const DOM = {
+          contactForm: document.getElementById('contactForm')
+        };
+        let isFormSubmitting = false;
+        document.addEventListener('DOMContentLoaded', () => {
+          initEmailJS();
+        });
+      </script>
+      <script src="script.js"></script>
 </body>
 </html>

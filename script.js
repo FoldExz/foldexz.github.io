@@ -203,45 +203,131 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-document.addEventListener("DOMContentLoaded", function () {
-    const form = document.getElementById("contactForm");
-    const successMessage = document.querySelector(".success-message");
-    const errorMessage = document.querySelector(".error-message");
+// EmailJS configuration - Store these in a secure way in production
+const emailConfig = {
+    PUBLIC_KEY: process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY, 
+    SERVICE_ID: process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID, 
+    TEMPLATE_ID: process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID, 
+    RECEIVER: process.env.NEXT_PUBLIC_EMAILJS_RECEIVER
+  };
   
-    // Init EmailJS
-    emailjs.init(window.env.EMAILJS_PUBLIC_KEY);
+  /**
+   * Initialize EmailJS with public key
+   */
+  function initEmailJS() {
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
+    script.async = true;
   
-    window.submitForm = function (event) {
-      event.preventDefault();
-  
-      successMessage.style.display = "none";
-      errorMessage.style.display = "none";
-  
-      const fullName = document.getElementById("fullName").value;
-      const email = document.getElementById("email").value;
-      const message = document.getElementById("message").value;
-  
-      const templateParams = {
-        from_name: fullName,
-        from_email: email,
-        message: message,
-        to_email: window.env.EMAILJS_RECEIVER,
-      };
-  
-      emailjs
-        .send(
-          window.env.EMAILJS_SERVICE_ID,
-          window.env.EMAILJS_TEMPLATE_ID,
-          templateParams
-        )
-        .then(() => {
-          form.reset();
-          successMessage.style.display = "block";
-        })
-        .catch((error) => {
-          console.error("EmailJS error:", error);
-          errorMessage.style.display = "block";
-        });
+    script.onload = () => {
+      emailjs.init(emailConfig.PUBLIC_KEY);
     };
-  });
+  
+    document.head.appendChild(script);
+  }
+  
+  /**
+   * Submit form using EmailJS
+   * @param {Event} event - Form submission event
+   */
+  function submitForm(event) {
+    event.preventDefault();
+  
+    if (isFormSubmitting) return;
+  
+    const form = event.target;
+    const submitBtn = form.querySelector('.submit-btn');
+    const originalBtnText = submitBtn.textContent;
+  
+    const formData = {
+      fullName: form.elements.fullName.value,
+      email: form.elements.email.value,
+      message: form.elements.message.value,
+      to_email: emailConfig.RECEIVER
+    };
+  
+    if (!validateForm(formData)) return;
+  
+    isFormSubmitting = true;
+    submitBtn.textContent = 'Sending...';
+    submitBtn.disabled = true;
+  
+    emailjs.send(
+      emailConfig.SERVICE_ID,
+      emailConfig.TEMPLATE_ID,
+      formData
+    ).then(
+      function(response) {
+        showFormNotification('success', 'Thank you for your message! I will get back to you soon.');
+        form.reset();
+      },
+      function(error) {
+        console.error('EmailJS error:', error);
+        showFormNotification('error', 'Something went wrong. Please try again or contact me directly.');
+      }
+    ).finally(() => {
+      isFormSubmitting = false;
+      submitBtn.textContent = originalBtnText;
+      submitBtn.disabled = false;
+    });
+  }
+  
+  /**
+   * Validate form data
+   */
+  function validateForm(formData) {
+    const { fullName, email, message } = formData;
+  
+    if (!fullName || fullName.trim().length < 2) {
+      showFormNotification('error', 'Please enter your full name');
+      return false;
+    }
+  
+    if (!email || !isValidEmail(email)) {
+      showFormNotification('error', 'Please enter a valid email address');
+      return false;
+    }
+  
+    if (!message || message.trim().length < 5) {
+      showFormNotification('error', 'Please enter your message');
+      return false;
+    }
+  
+    return true;
+  }
+  
+  /**
+   * Validate email format
+   */
+  function isValidEmail(email) {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+  }
+  
+  /**
+   * Show form notification
+   */
+  function showFormNotification(type, message) {
+    const successEl = document.querySelector('.success-message');
+    const errorEl = document.querySelector('.error-message');
+  
+    // Reset visibility
+    successEl.style.display = 'none';
+    errorEl.style.display = 'none';
+  
+    if (type === 'success') {
+      successEl.textContent = message;
+      successEl.style.display = 'block';
+    } else if (type === 'error') {
+      errorEl.textContent = message;
+      errorEl.style.display = 'block';
+    }
+  
+    // Auto-hide after 5s
+    setTimeout(() => {
+      successEl.style.display = 'none';
+      errorEl.style.display = 'none';
+    }, 5000);
+  }
+  
   
