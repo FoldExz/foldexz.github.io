@@ -203,131 +203,164 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// EmailJS configuration - Store these in a secure way in production
-const emailConfig = {
-    PUBLIC_KEY: process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY, 
-    SERVICE_ID: process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID, 
-    TEMPLATE_ID: process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID, 
-    RECEIVER: process.env.NEXT_PUBLIC_EMAILJS_RECEIVER
+// Global variables
+let isFormSubmitting = false;
+let emailjsLoaded = false;
+
+// DOM references will be initialized when the document loads
+const DOM = {};
+
+/**
+ * Initialize EmailJS with public key
+ */
+function initEmailJS() {
+  if (emailjsLoaded) return;
+  
+  const script = document.createElement('script');
+  script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
+  script.async = true;
+
+  script.onload = () => {
+    if (window.emailjs) {
+      // Initialize EmailJS with the public key from Vercel environment variables
+      // This will work because Vercel properly exposes these variables during build time
+      window.emailjs.init(process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY);
+      emailjsLoaded = true;
+      console.log('EmailJS initialized successfully');
+    } else {
+      console.error('EmailJS failed to load');
+    }
+  };
+
+  document.head.appendChild(script);
+}
+
+/**
+ * Submit form using EmailJS
+ * @param {Event} event - Form submission event
+ */
+function submitForm(event) {
+  event.preventDefault();
+  
+  if (isFormSubmitting) return;
+  
+  const form = event.target;
+  const submitBtn = form.querySelector('.submit-btn');
+  const originalBtnText = submitBtn.textContent;
+  
+  const formData = {
+    fullName: form.elements.fullName.value,
+    email: form.elements.email.value,
+    message: form.elements.message.value,
+    to_email: process.env.NEXT_PUBLIC_EMAILJS_RECEIVER
   };
   
-  /**
-   * Initialize EmailJS with public key
-   */
-  function initEmailJS() {
-    const script = document.createElement('script');
-    script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
-    script.async = true;
+  if (!validateForm(formData)) return;
   
-    script.onload = () => {
-      emailjs.init(emailConfig.PUBLIC_KEY);
-    };
+  isFormSubmitting = true;
+  submitBtn.textContent = 'Sending...';
+  submitBtn.disabled = true;
   
-    document.head.appendChild(script);
+  // Check if emailjs is available
+  if (!window.emailjs) {
+    console.error('EmailJS not loaded');
+    showFormNotification('error', 'Email service not loaded. Please try again later.');
+    isFormSubmitting = false;
+    submitBtn.textContent = originalBtnText;
+    submitBtn.disabled = false;
+    return;
   }
   
-  /**
-   * Submit form using EmailJS
-   * @param {Event} event - Form submission event
-   */
-  function submitForm(event) {
-    event.preventDefault();
-  
-    if (isFormSubmitting) return;
-  
-    const form = event.target;
-    const submitBtn = form.querySelector('.submit-btn');
-    const originalBtnText = submitBtn.textContent;
-  
-    const formData = {
-      fullName: form.elements.fullName.value,
-      email: form.elements.email.value,
-      message: form.elements.message.value,
-      to_email: emailConfig.RECEIVER
-    };
-  
-    if (!validateForm(formData)) return;
-  
-    isFormSubmitting = true;
-    submitBtn.textContent = 'Sending...';
-    submitBtn.disabled = true;
-  
-    emailjs.send(
-      emailConfig.SERVICE_ID,
-      emailConfig.TEMPLATE_ID,
-      formData
-    ).then(
-      function(response) {
-        showFormNotification('success', 'Thank you for your message! I will get back to you soon.');
-        form.reset();
-      },
-      function(error) {
-        console.error('EmailJS error:', error);
-        showFormNotification('error', 'Something went wrong. Please try again or contact me directly.');
-      }
-    ).finally(() => {
-      isFormSubmitting = false;
-      submitBtn.textContent = originalBtnText;
-      submitBtn.disabled = false;
-    });
-  }
-  
-  /**
-   * Validate form data
-   */
-  function validateForm(formData) {
-    const { fullName, email, message } = formData;
-  
-    if (!fullName || fullName.trim().length < 2) {
-      showFormNotification('error', 'Please enter your full name');
-      return false;
+  window.emailjs.send(
+    process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID,
+    process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID,
+    formData
+  ).then(
+    function(response) {
+      showFormNotification('success', 'Thank you for your message! I will get back to you soon.');
+      form.reset();
+    },
+    function(error) {
+      console.error('EmailJS error:', error);
+      showFormNotification('error', 'Something went wrong. Please try again or contact me directly.');
     }
+  ).finally(() => {
+    isFormSubmitting = false;
+    submitBtn.textContent = originalBtnText;
+    submitBtn.disabled = false;
+  });
+}
+
+/**
+ * Validate form data
+ */
+function validateForm(formData) {
+  const { fullName, email, message } = formData;
   
-    if (!email || !isValidEmail(email)) {
-      showFormNotification('error', 'Please enter a valid email address');
-      return false;
-    }
-  
-    if (!message || message.trim().length < 5) {
-      showFormNotification('error', 'Please enter your message');
-      return false;
-    }
-  
-    return true;
+  if (!fullName || fullName.trim().length < 2) {
+    showFormNotification('error', 'Please enter your full name');
+    return false;
   }
   
-  /**
-   * Validate email format
-   */
-  function isValidEmail(email) {
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return regex.test(email);
+  if (!email || !isValidEmail(email)) {
+    showFormNotification('error', 'Please enter a valid email address');
+    return false;
   }
   
-  /**
-   * Show form notification
-   */
-  function showFormNotification(type, message) {
-    const successEl = document.querySelector('.success-message');
-    const errorEl = document.querySelector('.error-message');
+  if (!message || message.trim().length < 5) {
+    showFormNotification('error', 'Please enter your message');
+    return false;
+  }
   
-    // Reset visibility
+  return true;
+}
+
+/**
+ * Validate email format
+ */
+function isValidEmail(email) {
+  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return regex.test(email);
+}
+
+/**
+ * Show form notification
+ */
+function showFormNotification(type, message) {
+  const successEl = document.querySelector('.success-message');
+  const errorEl = document.querySelector('.error-message');
+  
+  // Reset visibility
+  successEl.style.display = 'none';
+  errorEl.style.display = 'none';
+  
+  if (type === 'success') {
+    successEl.textContent = message;
+    successEl.style.display = 'block';
+  } else if (type === 'error') {
+    errorEl.textContent = message;
+    errorEl.style.display = 'block';
+  }
+  
+  // Auto-hide after 5s
+  setTimeout(() => {
     successEl.style.display = 'none';
     errorEl.style.display = 'none';
+  }, 5000);
+}
+
+// Initialize DOM elements and event listeners when the page loads
+document.addEventListener('DOMContentLoaded', function() {
+  DOM.contactForm = document.getElementById('contactForm');
   
-    if (type === 'success') {
-      successEl.textContent = message;
-      successEl.style.display = 'block';
-    } else if (type === 'error') {
-      errorEl.textContent = message;
-      errorEl.style.display = 'block';
-    }
+  // Initialize EmailJS
+  initEmailJS();
   
-    // Auto-hide after 5s
-    setTimeout(() => {
-      successEl.style.display = 'none';
-      errorEl.style.display = 'none';
-    }, 5000);
+  // Make sure the form exists before adding event listener
+  if (DOM.contactForm) {
+    // Remove any existing event listeners to prevent duplicates
+    DOM.contactForm.removeEventListener('submit', submitForm);
+    // Add event listener for form submission
+    DOM.contactForm.addEventListener('submit', submitForm);
   }
-  
-  
+});
